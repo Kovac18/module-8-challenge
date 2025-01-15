@@ -252,14 +252,6 @@ class Cli {
       ])
       .then((answers) => {
         // TODO: Use the answers object to pass the required properties to the Motorbike constructor
-        const frontWheel = new Wheel(
-          answers.frontWheelDiameter,
-          answers.frontWheelBrand
-        )
-        const rearWheel = new Wheel(
-          answers.rearWheelDiameter,
-          answers.rearWheelBrand
-        )
         const moto = new Motorbike(
           Cli.generateVin(),
           answers.color,
@@ -268,7 +260,7 @@ class Cli {
           parseInt(answers.year),
           parseInt(answers.weight),
           parseInt(answers.topSpeed),
-          [frontWheel, rearWheel]
+          []
         )
         // TODO: push the motorbike to the vehicles array
         this.vehicles.push(moto);
@@ -298,11 +290,11 @@ class Cli {
       ])
       .then((answers) => {
         // TODO: check if the selected vehicle is the truck
-        if (answers ===  truck) {
+        if (answers.vehicleToTow.vin ===  truck) {
           console.log("You can't tow yourself!");
           this.performActions();
         } else {
-          console.log(`${answers} is being towed!`);
+          console.log(`${answers.vehicleToTow.make} ${answers.vehicleToTow.model} is being towed!`);
           this.performActions();
         }
         // TODO: if it is, log that the truck cannot tow itself then perform actions on the truck to allow the user to select another action
@@ -394,20 +386,24 @@ class Cli {
             }
           }
         } else if (answers.action === 'Tow') { 
-          console.log(this.vehicles);     // need to figure out how to sort by vehicle type
+          console.log(this.vehicles);
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
               if(this.vehicles[i] instanceof Truck) {
-                return this.findVehicleToTow(this.vehicles[i]);
+                return this.findVehicleToTow(this.vehicles[i].vin);
               } else {
                 console.log('You need a truck to tow vehicles!');
               }
             }
           }
-        } else if (answers.action === 'Wheelie') {    // need to figure out how to sort by vehicle type
+        } else if (answers.action === 'Wheelie') {
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
-              // wheelie();
+              if(this.vehicles[i] instanceof Motorbike) {
+                // wheelie();
+              } else {
+                console.log('You need a motorbike to wheelie!');
+              }
             }
           }
         }
