@@ -6,7 +6,7 @@ import Motorbike from "./Motorbike.js";
 import Wheel from "./Wheel.js";
 
 // define the Cli class
-class Cli {
+class Cli{
   // TODO: update the vehicles property to accept Truck and Motorbike objects as well DONE
   // TODO: You will need to use the Union operator to define additional types for the array DONE
   // TODO: See the AbleToTow interface for an example of how to use the Union operator DONE
@@ -15,7 +15,7 @@ class Cli {
   exit: boolean = false;
 
   // TODO: Update the constructor to accept Truck and Motorbike objects as well
-  constructor(vehicles: (Car)[]) {
+  constructor(vehicles: (Car | Truck | Motorbike)[]) {
     this.vehicles = vehicles;
   }
 
@@ -290,15 +290,22 @@ class Cli {
       ])
       .then((answers) => {
         // TODO: check if the selected vehicle is the truck
-        if (answers.vehicleToTow.vin ===  truck) {
+        if (answers.vehicleToTow.vin ===  truck.vin) {
           console.log("You can't tow yourself!");
           this.performActions();
         } else {
-          console.log(`${answers.vehicleToTow.make} ${answers.vehicleToTow.model} is being towed!`);
+          this.tow(answers);
           this.performActions();
         }
-        // TODO: if it is, log that the truck cannot tow itself then perform actions on the truck to allow the user to select another action
-        // TODO: if it is not, tow the selected vehicle then perform actions on the truck to allow the user to select another action
+        //  else if (answers.vehicleToTow.weight <= truck.towingCapacity) {
+        //   console.log(`${answers.vehicleToTow.make} ${answers.vehicleToTow.model} is being towed!`);
+        //   this.performActions();
+        // } else {
+        //   console.log('That vehicle is too heavy to tow!');
+        //   this.performActions();
+        // }
+        // TODO: if it is, log that the truck cannot tow itself then perform actions on the truck to allow the user to select another action DONE
+        // TODO: if it is not, tow the selected vehicle then perform actions on the truck to allow the user to select another action DONE
       });
   }
 
@@ -390,7 +397,7 @@ class Cli {
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
               if(this.vehicles[i] instanceof Truck) {
-                return this.findVehicleToTow(this.vehicles[i].vin);
+                return this.findVehicleToTow(this.vehicles[i]);
               } else {
                 console.log('You need a truck to tow vehicles!');
               }
@@ -400,7 +407,7 @@ class Cli {
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
               if(this.vehicles[i] instanceof Motorbike) {
-                // wheelie();
+                return this.wheelie();
               } else {
                 console.log('You need a motorbike to wheelie!');
               }
