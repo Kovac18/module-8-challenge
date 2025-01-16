@@ -252,7 +252,7 @@ class Cli{
       ])
       .then((answers) => {
         // TODO: Use the answers object to pass the required properties to the Motorbike constructor
-        const moto = new Motorbike(
+        const motorbike = new Motorbike(
           Cli.generateVin(),
           answers.color,
           answers.make,
@@ -263,9 +263,9 @@ class Cli{
           []
         )
         // TODO: push the motorbike to the vehicles array
-        this.vehicles.push(moto);
+        this.vehicles.push(motorbike);
         // TODO: set the selectedVehicleVin to the vin of the motorbike
-        this.selectedVehicleVin = moto.vin;
+        this.selectedVehicleVin = motorbike.vin;
         // TODO: perform actions on the motorbike
         this.performActions();
       });
@@ -294,7 +294,7 @@ class Cli{
           console.log("You can't tow yourself!");
           this.performActions();
         } else {
-          this.tow(answers);
+          truck.tow(answers.vehicleToTow);
           this.performActions();
         }
         //  else if (answers.vehicleToTow.weight <= truck.towingCapacity) {
@@ -393,7 +393,6 @@ class Cli{
             }
           }
         } else if (answers.action === 'Tow') { 
-          console.log(this.vehicles);
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
               if(this.vehicles[i] instanceof Truck) {
@@ -407,7 +406,9 @@ class Cli{
           for (let i = 0; i < this.vehicles.length; i++) {
             if (this.vehicles[i].vin === this.selectedVehicleVin) {
               if(this.vehicles[i] instanceof Motorbike) {
-                return this.wheelie();
+                let motorbike: Motorbike | undefined;
+                motorbike = this.vehicles[i] as Motorbike
+                motorbike.wheelie(motorbike);
               } else {
                 console.log('You need a motorbike to wheelie!');
               }
